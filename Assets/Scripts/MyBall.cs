@@ -2,6 +2,7 @@
                                                                                                             
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class MyBall : MonoBehaviour
 {
@@ -11,6 +12,7 @@ public class MyBall : MonoBehaviour
     bool isJump;
     public int itemCount;
     AudioSource audio;
+    public GameManager manager;
 
     void Awake()
     {
@@ -46,6 +48,23 @@ public class MyBall : MonoBehaviour
            itemCount++;
            audio.Play();
            other.gameObject.SetActive(false);
+           manager.GetItem(itemCount);
+       }
+
+       else if(other.tag == "Goal"){
+           if(itemCount == manager.TotalItemCount){
+               //Game Cler!
+               if(manager.stage == 2){
+                   SceneManager.LoadScene(0);
+               }
+               else{
+                   SceneManager.LoadScene(manager.stage+1);
+               }
+           }
+           else{
+               //Game Restart
+                SceneManager.LoadScene(manager.stage);
+           }
        }
    }
 }
